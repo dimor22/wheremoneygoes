@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'household_id',
     ];
 
     /**
@@ -46,6 +47,11 @@ class User extends Authenticatable
         ];
     }
 
+    public function household()
+    {
+        return $this->belongsTo(Household::class);
+    }
+
     public function expenses()
     {
         return $this->hasMany(Expense::class);
@@ -53,16 +59,16 @@ class User extends Authenticatable
 
     public function categories()
     {
-        return $this->hasMany(Category::class);
+        return $this->household ? $this->household->categories() : collect();
     }
 
     public function stores()
     {
-        return $this->hasMany(Store::class);
+        return $this->household ? $this->household->stores() : collect();
     }
 
     public function setting()
     {
-        return $this->hasOne(Setting::class);
+        return $this->household ? $this->household->setting : null;
     }
 }

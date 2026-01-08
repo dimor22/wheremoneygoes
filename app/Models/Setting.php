@@ -9,6 +9,7 @@ class Setting extends Model
 {
     protected $fillable = [
         'user_id',
+        'household_id',
         'monthly_budget',
     ];
 
@@ -19,5 +20,10 @@ class Setting extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function household(): BelongsTo
+    {
+        return $this->belongsTo(Household::class);
     }
 }

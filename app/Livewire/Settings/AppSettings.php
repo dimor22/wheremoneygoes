@@ -29,7 +29,8 @@ class AppSettings extends Component
 
     public function mount()
     {
-        $setting = auth()->user()->setting;
+        $household = auth()->user()->household;
+        $setting = $household ? $household->setting : null;
         $this->monthly_budget = $setting ? $setting->monthly_budget : 0;
     }
 
@@ -37,9 +38,15 @@ class AppSettings extends Component
     {
         $validated = $this->validate();
 
-        auth()->user()->setting()->updateOrCreate(
-            ['user_id' => auth()->id()],
-            ['monthly_budget' => $validated['monthly_budget']]
+        $household = auth()->user()->household;
+        if (!$household) {
+            session()->flash('error', 'You need to be in a household to save settings.');
+            return;
+        }
+
+        $household->setting()->updateOrCreate(
+            ['household_id' => $household->id],
+            ['user_id' => auth()->id(), 'monthly_budget' => $validated['monthly_budget']]
         );
 
         session()->flash('success', 'Settings saved successfully!');
@@ -52,7 +59,14 @@ class AppSettings extends Component
             'newCategoryName' => 'required|string|max:255',
         ]);
 
-        auth()->user()->categories()->create([
+        $household = auth()->user()->household;
+        if (!$household) {
+            session()->flash('error', 'You need to be in a household to create categories.');
+            return;
+        }
+
+        $household->categories()->create([
+            'user_id' => auth()->id(),
             'name' => $this->newCategoryName,
         ]);
 
@@ -62,7 +76,10 @@ class AppSettings extends Component
 
     public function editCategory($categoryId)
     {
-        $category = auth()->user()->categories()->find($categoryId);
+        $household = auth()->user()->household;
+        if (!$household) return;
+
+        $category = $household->categories()->find($categoryId);
         if ($category) {
             $this->editingCategoryId = $categoryId;
             $this->editingCategoryName = $category->name;
@@ -75,7 +92,10 @@ class AppSettings extends Component
             'editingCategoryName' => 'required|string|max:255',
         ]);
 
-        $category = auth()->user()->categories()->find($this->editingCategoryId);
+        $household = auth()->user()->household;
+        if (!$household) return;
+
+        $category = $household->categories()->find($this->editingCategoryId);
         if ($category) {
             $category->update(['name' => $this->editingCategoryName]);
             session()->flash('success', 'Category updated successfully!');
@@ -94,7 +114,10 @@ class AppSettings extends Component
 
     public function deleteCategory($categoryId)
     {
-        $category = auth()->user()->categories()->find($categoryId);
+        $household = auth()->user()->household;
+        if (!$household) return;
+
+        $category = $household->categories()->find($categoryId);
         if ($category) {
             // Check if category has expenses
             if ($category->expenses()->count() > 0) {
@@ -113,7 +136,14 @@ class AppSettings extends Component
             'newStoreName' => 'required|string|max:255',
         ]);
 
-        auth()->user()->stores()->create([
+        $household = auth()->user()->household;
+        if (!$household) {
+            session()->flash('error', 'You need to be in a household to create stores.');
+            return;
+        }
+
+        $household->stores()->create([
+            'user_id' => auth()->id(),
             'name' => $this->newStoreName,
         ]);
 
@@ -123,7 +153,10 @@ class AppSettings extends Component
 
     public function editStore($storeId)
     {
-        $store = auth()->user()->stores()->find($storeId);
+        $household = auth()->user()->household;
+        if (!$household) return;
+
+        $store = $household->stores()->find($storeId);
         if ($store) {
             $this->editingStoreId = $storeId;
             $this->editingStoreName = $store->name;
@@ -136,7 +169,10 @@ class AppSettings extends Component
             'editingStoreName' => 'required|string|max:255',
         ]);
 
-        $store = auth()->user()->stores()->find($this->editingStoreId);
+        $household = auth()->user()->household;
+        if (!$household) return;
+
+        $store = $household->stores()->find($this->editingStoreId);
         if ($store) {
             $store->update(['name' => $this->editingStoreName]);
             session()->flash('success', 'Store updated successfully!');
@@ -155,7 +191,10 @@ class AppSettings extends Component
 
     public function deleteStore($storeId)
     {
-        $store = auth()->user()->stores()->find($storeId);
+        $household = auth()->user()->household;
+        if (!$household) return;
+
+        $store = $household->stores()->find($storeId);
         if ($store) {
             // Check if store has expenses
             if ($store->expenses()->count() > 0) {
@@ -169,8 +208,9 @@ class AppSettings extends Component
 
     public function render()
     {
-        $categories = auth()->user()->categories()->withCount('expenses')->orderBy('name')->get();
-        $stores = auth()->user()->stores()->withCount('expenses')->orderBy('name')->get();
+        $household = auth()->user()->household;
+        $categories = $household ? $household->categories()->withCount('expenses')->orderBy('name')->get() : collect();
+        $stores = $household ? $household->stores()->withCount('expenses')->orderBy('name')->get() : collect();
 
         return view('livewire.settings.app-settings', [
             'categories' => $categories,

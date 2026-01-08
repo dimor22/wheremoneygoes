@@ -51,7 +51,14 @@ class AddExpense extends Component
     {
         $this->validate(['new_category_name' => 'required|string|max:255']);
 
-        $category = auth()->user()->categories()->create([
+        $household = auth()->user()->household;
+        if (!$household) {
+            session()->flash('error', 'You need to be in a household to create categories.');
+            return;
+        }
+
+        $category = $household->categories()->create([
+            'user_id' => auth()->id(),
             'name' => $this->new_category_name,
         ]);
 
@@ -73,7 +80,14 @@ class AddExpense extends Component
     {
         $this->validate(['new_store_name' => 'required|string|max:255']);
 
-        $store = auth()->user()->stores()->create([
+        $household = auth()->user()->household;
+        if (!$household) {
+            session()->flash('error', 'You need to be in a household to create stores.');
+            return;
+        }
+
+        $store = $household->stores()->create([
+            'user_id' => auth()->id(),
             'name' => $this->new_store_name,
         ]);
 
@@ -97,8 +111,9 @@ class AddExpense extends Component
         auth()->user()->expenses()->create($validated);
 
         session()->flash('success', 'Expense added successfully!');
-
-        $this->reset(['amount', 'category_id', 'store_id', 'notes']);
+household = auth()->user()->household;
+        $categories = $household ? $household->categories()->orderBy('name')->get() : collect();
+        $stores = $household ? $household->stores()->orderBy('name')->get() : colleces']);
         $this->expense_date = now()->format('Y-m-d');
     }
 
