@@ -19,7 +19,7 @@ class BudgetOverview extends Component
         $endOfMonth = Carbon::now()->endOfMonth();
 
         // Calculate total expenses for current month across all household members
-        $currentMonthExpenses = $household 
+        $currentMonthExpenses = $household
             ? $household->users()
                 ->with(['expenses' => function($query) use ($startOfMonth, $endOfMonth) {
                     $query->whereBetween('expense_date', [$startOfMonth, $endOfMonth]);

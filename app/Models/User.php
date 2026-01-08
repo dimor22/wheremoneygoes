@@ -59,16 +59,32 @@ class User extends Authenticatable
 
     public function categories()
     {
-        return $this->household ? $this->household->categories() : collect();
+        if ($this->household_id) {
+            return Category::where('household_id', $this->household_id);
+        }
+        return Category::whereRaw('0 = 1'); // Return empty query
     }
 
     public function stores()
     {
-        return $this->household ? $this->household->stores() : collect();
+        if ($this->household_id) {
+            return Store::where('household_id', $this->household_id);
+        }
+        return Store::whereRaw('0 = 1'); // Return empty query
     }
 
     public function setting()
     {
-        return $this->household ? $this->household->setting : null;
+        if ($this->household_id) {
+            return $this->hasOneThrough(
+                Setting::class,
+                Household::class,
+                'id', // Foreign key on households table
+                'household_id', // Foreign key on settings table
+                'household_id', // Local key on users table
+                'id' // Local key on households table
+            );
+        }
+        return $this->hasOne(Setting::class)->whereRaw('0 = 1'); // Return empty relation
     }
 }

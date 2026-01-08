@@ -18,7 +18,7 @@ return new class extends Migration
     {
         // Create a household for each existing user
         $users = User::all();
-        
+
         foreach ($users as $user) {
             // Create household for user
             $household = Household::create([
@@ -50,7 +50,7 @@ return new class extends Migration
         Category::query()->update(['household_id' => null]);
         Store::query()->update(['household_id' => null]);
         Setting::query()->update(['household_id' => null]);
-        
+
         // Delete all households
         Household::query()->delete();
     }

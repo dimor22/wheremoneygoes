@@ -111,9 +111,9 @@ class AddExpense extends Component
         auth()->user()->expenses()->create($validated);
 
         session()->flash('success', 'Expense added successfully!');
-household = auth()->user()->household;
+        $household = auth()->user()->household;
         $categories = $household ? $household->categories()->orderBy('name')->get() : collect();
-        $stores = $household ? $household->stores()->orderBy('name')->get() : colleces']);
+        $stores = $household ? $household->stores()->orderBy('name')->get() : collect();
         $this->expense_date = now()->format('Y-m-d');
     }
 

@@ -9,7 +9,7 @@
                     <h4 class="text-md font-medium mb-2">Your Household</h4>
                     <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded">
                         <p class="mb-2"><strong>Name:</strong> {{ $household->name }}</p>
-                        <p class="mb-2"><strong>Share Code:</strong> 
+                        <p class="mb-2"><strong>Share Code:</strong>
                             <span class="font-mono text-lg bg-yellow-200 dark:bg-yellow-900 px-2 py-1 rounded">
                                 {{ $household->share_code }}
                             </span>
@@ -47,9 +47,9 @@
                     <form wire:submit.prevent="joinHousehold" class="mt-4">
                         <div class="mb-4">
                             <label for="join_code" class="block text-sm font-medium mb-2">Enter Share Code</label>
-                            <input 
-                                type="text" 
-                                id="join_code" 
+                            <input
+                                type="text"
+                                id="join_code"
                                 wire:model="join_code"
                                 maxlength="8"
                                 class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 uppercase font-mono text-lg"
@@ -60,7 +60,7 @@
                             @enderror
                         </div>
 
-                        <button 
+                        <button
                             type="submit"
                             class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                         >

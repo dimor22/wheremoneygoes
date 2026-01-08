@@ -29,5 +29,13 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
             'household_id' => $household->id,
         ]);
+
+        // Create a second development user (wife) to test household sharing
+        User::create([
+            'name' => 'Wife',
+            'email' => 'wife@example.com',
+            'password' => Hash::make('password'),
+            'email_verified_at' => now(),
+        ]);
     }
 }

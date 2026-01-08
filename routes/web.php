@@ -12,6 +12,10 @@ Route::view('expenses', 'expenses')
     ->middleware(['auth', 'verified'])
     ->name('expenses');
 
+Route::view('expense-list', 'expense-list')
+    ->middleware(['auth', 'verified'])
+    ->name('expense-list');
+
 Route::view('settings', 'settings')
     ->middleware(['auth'])
     ->name('settings');
