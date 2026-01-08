@@ -7,9 +7,9 @@
         </div>
 
         <!-- Budget Stats Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
             <!-- Budget Amount -->
-            <div class="text-center">
+            <div class="text-center col-span-2 md:col-span-1">
                 <p class="text-blue-100 text-sm mb-1">Monthly Budget</p>
                 <p class="text-3xl font-bold">${{ number_format($budget, 2) }}</p>
             </div>
