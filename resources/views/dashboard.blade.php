@@ -12,7 +12,7 @@
                 <livewire:dashboard.budget-overview />
             </div>
 
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
                 <div class="p-6 text-gray-900">
 
 
@@ -34,6 +34,11 @@
                         </a>
                     </div>
                 </div>
+            </div>
+
+            <!-- Projection Info Compact -->
+            <div class="mb-6">
+                <livewire:dashboard.projection-info-compact />
             </div>
         </div>
     </div>
