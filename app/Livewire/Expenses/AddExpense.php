@@ -35,6 +35,9 @@ class AddExpense extends Component
     #[Validate('required|string|max:255')]
     public $new_store_name = '';
 
+    // For toggling optional fields on mobile
+    public $showOptionalFields = false;
+
     public function mount()
     {
         $this->expense_date = now()->format('Y-m-d');

@@ -46,22 +46,6 @@
                         @enderror
                     </div>
 
-                    <!-- Date -->
-                    <div>
-                        <label for="expense_date" class="block text-sm font-medium text-gray-700">
-                            Date *
-                        </label>
-                        <input
-                            type="date"
-                            wire:model="expense_date"
-                            id="expense_date"
-                            class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                        >
-                        @error('expense_date')
-                            <span class="text-red-500 text-sm">{{ $message }}</span>
-                        @enderror
-                    </div>
-
                     <!-- Category -->
                     <div>
                         <div class="flex items-center justify-between mb-1">
@@ -167,21 +151,53 @@
                     </div>
                 </div>
 
-                <!-- Notes -->
-                <div class="mt-6">
-                    <label for="notes" class="block text-sm font-medium text-gray-700">
-                        Notes (Optional)
-                    </label>
-                    <textarea
-                        wire:model="notes"
-                        id="notes"
-                        rows="3"
-                        class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                        placeholder="Any additional details about this expense..."
-                    ></textarea>
-                    @error('notes')
-                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                    @enderror
+                <!-- Mobile Toggle for Optional Fields -->
+                <div class="md:hidden mt-4">
+                    <button
+                        type="button"
+                        wire:click="$toggle('showOptionalFields')"
+                        class="w-full flex items-center justify-between px-4 py-2 text-sm font-medium text-gray-700 bg-gray-50 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
+                        <span>{{ $showOptionalFields ? 'Hide' : 'Show' }} Optional Fields</span>
+                        <svg class="w-5 h-5 transition-transform {{ $showOptionalFields ? 'rotate-180' : '' }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="hidden md:block" x-data="{ show: @entangle('showOptionalFields') }" :class="{ '!block': show }">
+                    <!-- Date -->
+                    <div class="mt-6">
+                        <label for="expense_date" class="block text-sm font-medium text-gray-700">
+                            Date *
+                        </label>
+                        <input
+                            type="date"
+                            wire:model="expense_date"
+                            id="expense_date"
+                            class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                        >
+                        @error('expense_date')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="mt-6">
+                        <label for="notes" class="block text-sm font-medium text-gray-700">
+                            Notes (Optional)
+                        </label>
+                        <textarea
+                            wire:model="notes"
+                            id="notes"
+                            rows="3"
+                            class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                            placeholder="Any additional details about this expense..."
+                        ></textarea>
+                        @error('notes')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
+                    </div>
                 </div>
 
                 <!-- Submit Button -->
