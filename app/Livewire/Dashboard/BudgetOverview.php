@@ -13,6 +13,7 @@ class BudgetOverview extends Component
         $household = $user->household;
         $setting = $household ? $household->setting : null;
         $budget = $setting ? $setting->monthly_budget : 0;
+        $daysRemaining = Carbon::now()->endOfMonth()->day - Carbon::now()->day + 1;
 
         // Get current month start and end
         $startOfMonth = Carbon::now()->startOfMonth();
@@ -42,6 +43,7 @@ class BudgetOverview extends Component
             'remaining' => $remaining,
             'currentMonth' => $currentMonth,
             'percentage' => $budget > 0 ? ($currentMonthExpenses / $budget) * 100 : 0,
+            'daysRemaining' => $daysRemaining,
         ]);
     }
 }

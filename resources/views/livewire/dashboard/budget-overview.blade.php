@@ -7,11 +7,17 @@
         </div>
 
         <!-- Budget Stats Grid -->
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
             <!-- Budget Amount -->
-            <div class="text-center col-span-2 md:col-span-1">
+            <div class="text-center">
                 <p class="text-blue-100 text-sm mb-1">Monthly Budget</p>
                 <p class="text-3xl font-bold">${{ number_format($budget, 2) }}</p>
+            </div>
+
+            <!-- Days of the month remain -->
+            <div class="text-center">
+                <p class="text-blue-100 text-sm mb-1">Days Remaining</p>
+                <p class="text-5xl font-bold">{{ $daysRemaining }}</p>
             </div>
 
             <!-- Spent Amount -->
