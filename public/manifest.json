@@ -2,7 +2,7 @@
   "name": "Where Money Goes",
   "short_name": "MoneyTracker",
   "description": "Track your household expenses",
-  "start_url": "/",
+  "start_url": "/dashboard",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#1f2937",
