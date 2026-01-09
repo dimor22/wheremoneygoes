@@ -21,6 +21,39 @@ class ExpenseList extends Component
         }
     }
 
+    public function deleteExpense($expenseId)
+    {
+        $expense = Expense::findOrFail($expenseId);
+
+        // Check if the expense belongs to the user's household
+        if (auth()->user()->household->users->pluck('id')->contains($expense->user_id)) {
+            $expense->delete();
+            session()->flash('message', 'Expense deleted successfully.');
+        }
+    }
+
+    public function restoreExpense($expenseId)
+    {
+        $expense = Expense::withTrashed()->findOrFail($expenseId);
+
+        // Check if the expense belongs to the user's household
+        if (auth()->user()->household->users->pluck('id')->contains($expense->user_id)) {
+            $expense->restore();
+            session()->flash('message', 'Expense restored successfully.');
+        }
+    }
+
+    public function permanentlyDeleteExpense($expenseId)
+    {
+        $expense = Expense::withTrashed()->findOrFail($expenseId);
+
+        // Check if the expense belongs to the user's household
+        if (auth()->user()->household->users->pluck('id')->contains($expense->user_id)) {
+            $expense->forceDelete();
+            session()->flash('message', 'Expense permanently deleted.');
+        }
+    }
+
     public function render()
     {
         $household = auth()->user()->household;
@@ -28,7 +61,8 @@ class ExpenseList extends Component
         if (!$household) {
             $expenses = collect();
         } else {
-            $expenses = Expense::whereIn('user_id', $household->users->pluck('id'))
+            $expenses = Expense::withTrashed()
+                ->whereIn('user_id', $household->users->pluck('id'))
                 ->with(['category', 'store', 'user'])
                 ->when($this->search, function ($query) {
                     $query->where(function ($q) {

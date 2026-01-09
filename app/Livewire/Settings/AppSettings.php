@@ -119,8 +119,8 @@ class AppSettings extends Component
 
         $category = $household->categories()->find($categoryId);
         if ($category) {
-            // Check if category has expenses
-            if ($category->expenses()->count() > 0) {
+            // Check if category has expenses (including soft-deleted)
+            if ($category->expenses()->withTrashed()->count() > 0) {
                 session()->flash('error', 'Cannot delete category with existing expenses.');
             } else {
                 $category->delete();
@@ -196,8 +196,8 @@ class AppSettings extends Component
 
         $store = $household->stores()->find($storeId);
         if ($store) {
-            // Check if store has expenses
-            if ($store->expenses()->count() > 0) {
+            // Check if store has expenses (including soft-deleted)
+            if ($store->expenses()->withTrashed()->count() > 0) {
                 session()->flash('error', 'Cannot delete store with existing expenses.');
             } else {
                 $store->delete();
@@ -209,8 +209,12 @@ class AppSettings extends Component
     public function render()
     {
         $household = auth()->user()->household;
-        $categories = $household ? $household->categories()->withCount('expenses')->orderBy('name')->get() : collect();
-        $stores = $household ? $household->stores()->withCount('expenses')->orderBy('name')->get() : collect();
+        $categories = $household ? $household->categories()->withCount(['expenses' => function ($query) {
+            $query->withTrashed();
+        }])->orderBy('name')->get() : collect();
+        $stores = $household ? $household->stores()->withCount(['expenses' => function ($query) {
+            $query->withTrashed();
+        }])->orderBy('name')->get() : collect();
 
         return view('livewire.settings.app-settings', [
             'categories' => $categories,
