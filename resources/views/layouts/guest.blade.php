@@ -4,10 +4,12 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <meta name="theme-color" content="#1f2937">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         <link rel="icon" type="image/png" href="/images/whereMoneyGoesLogoTransparent.png">
+        <link rel="manifest" href="/manifest.json">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -28,5 +30,16 @@
                 {{ $slot }}
             </div>
         </div>
+
+        <script>
+            // Register service worker for PWA
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/sw.js')
+                        .then(registration => console.log('Service Worker registered:', registration))
+                        .catch(error => console.log('Service Worker registration failed:', error));
+                });
+            }
+        </script>
     </body>
 </html>
