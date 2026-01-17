@@ -1,5 +1,5 @@
 <div>
-    <div class="px-3 py-2 mb-6 flex items-center justify-end">
+    <div class="px-3 py-2 mb-6 flex items-center justify-center md:justify-end">
         <div class="flex gap-3">
             <div class="text-center">
                 <p class="text-xs opacity-90">Daily</p>
