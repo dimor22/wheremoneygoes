@@ -27,18 +27,20 @@
                     <div class="grid grid-cols-2 gap-4 mt-6">
 
 
-                        <a href="{{ route('expense-list') }}" class="block p-6 bg-purple-50 rounded-lg hover:bg-purple-100 transition">
-                            <div class="text-purple-600 font-semibold text-xl mb-2 text-center md:text-left">
-                                <span class="text-3xl pr-2">📋</span> View Expenses
+                        <a href="{{ route('expense-list') }}" class="flex flex-col items-center justify-center p-6 bg-white border-2 border-purple-200 rounded-xl hover:border-purple-400 hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1">
+                            <span class="text-4xl mb-2">📋</span>
+                            <div class="text-purple-600 font-bold text-lg text-center">
+                                View Expenses
                             </div>
-                            <p class="text-gray-600 text-sm hidden md:block">View and manage your recorded expenses</p>
+                            <p class="text-gray-500 text-xs mt-1 text-center hidden md:block">Manage your expenses</p>
                         </a>
 
-                        <a href="{{ route('expenses') }}" class="block p-6 bg-blue-50 rounded-lg hover:bg-blue-100 transition">
-                            <div class="text-blue-600 font-semibold text-xl mb-2 text-center md:text-left">
-                                <span class="text-3xl pr-2">💰</span> Add Expense
+                        <a href="{{ route('expenses') }}" class="flex flex-col items-center justify-center p-6 bg-white border-2 border-blue-200 rounded-xl hover:border-blue-400 hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1">
+                            <span class="text-4xl mb-2">💰</span>
+                            <div class="text-blue-600 font-bold text-lg text-center">
+                                Add Expense
                             </div>
-                            <p class="text-gray-600 text-sm hidden md:block">Record a new expense with amount, category, and store</p>
+                            <p class="text-gray-500 text-xs mt-1 text-center hidden md:block">Record new expense</p>
                         </a>
                     </div>
                 </div>
