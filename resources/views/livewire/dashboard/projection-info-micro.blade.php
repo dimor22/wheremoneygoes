@@ -1,6 +1,6 @@
 <div>
     <div class="px-3 py-2 mb-6 flex items-center justify-center md:justify-end">
-        <div class="flex gap-3">
+        <div class="flex gap-3 dark:text-white">
             <div class="text-center">
                 <p class="text-xs opacity-90">Daily</p>
                 <p class="text-lg font-bold">${{ number_format($dailyAverage, 0) }}</p>

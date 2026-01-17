@@ -222,7 +222,7 @@
                 <div class="mt-6 border-t pt-6">
                     <button
                         type="submit"
-                        class="w-full md:w-auto inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700"
+                        class="w-full md:w-auto inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-base font-medium rounded-md hover:bg-green-700 bg-green-600 text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700"
                     >
                         Add Expense
                     </button>
