@@ -80,6 +80,7 @@ class ExpenseList extends Component
                     });
                 })
                 ->orderBy($this->sortField, $this->sortDirection)
+                ->orderBy('created_at', 'desc')
                 ->get();
         }
 

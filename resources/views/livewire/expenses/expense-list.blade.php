@@ -35,18 +35,19 @@
                                     <span class="ml-1">{{ $sortDirection === 'asc' ? '↑' : '↓' }}</span>
                                 @endif
                             </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600" wire:click="sortBy('category_id')">
-                                Category
-                                @if($sortField === 'category_id')
-                                    <span class="ml-1">{{ $sortDirection === 'asc' ? '↑' : '↓' }}</span>
-                                @endif
-                            </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600" wire:click="sortBy('store_id')">
                                 Store
                                 @if($sortField === 'store_id')
                                     <span class="ml-1">{{ $sortDirection === 'asc' ? '↑' : '↓' }}</span>
                                 @endif
                             </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600" wire:click="sortBy('category_id')">
+                                Category
+                                @if($sortField === 'category_id')
+                                    <span class="ml-1">{{ $sortDirection === 'asc' ? '↑' : '↓' }}</span>
+                                @endif
+                            </th>
+
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600" wire:click="sortBy('user_id')">
                                 User
                                 @if($sortField === 'user_id')
@@ -65,17 +66,18 @@
                         @forelse($expenses as $expense)
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 {{ $expense->trashed() ? 'opacity-50' : '' }}">
                                 <td class="px-6 py-4 whitespace-nowrap text-sm {{ $expense->trashed() ? 'line-through text-gray-400 dark:text-gray-500' : 'text-gray-900 dark:text-gray-100' }}">
-                                    {{ \Carbon\Carbon::parse($expense->expense_date)->format('M d, Y') }}
+                                    {{ \Carbon\Carbon::parse($expense->expense_date)->format('M d') }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium {{ $expense->trashed() ? 'line-through text-gray-400 dark:text-gray-500' : 'text-gray-900 dark:text-gray-100' }}">
                                     ${{ number_format($expense->amount, 2) }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm {{ $expense->trashed() ? 'line-through text-gray-400 dark:text-gray-500' : 'text-gray-900 dark:text-gray-100' }}">
-                                    {{ $expense->category->name ?? 'N/A' }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm {{ $expense->trashed() ? 'line-through text-gray-400 dark:text-gray-500' : 'text-gray-900 dark:text-gray-100' }}">
                                     {{ $expense->store->name ?? 'N/A' }}
                                 </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm {{ $expense->trashed() ? 'line-through text-gray-400 dark:text-gray-500' : 'text-gray-900 dark:text-gray-100' }}">
+                                    {{ $expense->category->name ?? 'N/A' }}
+                                </td>
+
                                 <td class="px-6 py-4 whitespace-nowrap text-sm {{ $expense->trashed() ? 'line-through text-gray-400 dark:text-gray-500' : 'text-gray-900 dark:text-gray-100' }}">
                                     {{ $expense->user->name ?? 'N/A' }}
                                 </td>

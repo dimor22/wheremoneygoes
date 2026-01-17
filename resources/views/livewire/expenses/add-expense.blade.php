@@ -4,19 +4,37 @@
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Add New Expense</h3>
 
             @if (session('success'))
-                <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+                <div
+                    x-data="{ show: true }"
+                    x-init="setTimeout(() => show = false, 3000)"
+                    x-show="show"
+                    x-transition
+                    class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded"
+                >
                     {{ session('success') }}
                 </div>
             @endif
 
             @if (session('category_created'))
-                <div class="mb-4 p-4 bg-blue-100 border border-blue-400 text-blue-700 rounded">
+                <div
+                    x-data="{ show: true }"
+                    x-init="setTimeout(() => show = false, 3000)"
+                    x-show="show"
+                    x-transition
+                    class="mb-4 p-4 bg-blue-100 border border-blue-400 text-blue-700 rounded"
+                >
                     {{ session('category_created') }}
                 </div>
             @endif
 
             @if (session('store_created'))
-                <div class="mb-4 p-4 bg-blue-100 border border-blue-400 text-blue-700 rounded">
+                <div
+                    x-data="{ show: true }"
+                    x-init="setTimeout(() => show = false, 3000)"
+                    x-show="show"
+                    x-transition
+                    class="mb-4 p-4 bg-blue-100 border border-blue-400 text-blue-700 rounded"
+                >
                     {{ session('store_created') }}
                 </div>
             @endif

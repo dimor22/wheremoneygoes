@@ -1,10 +1,10 @@
 <div>
     <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-lg shadow-lg p-8 text-white">
         <!-- Current Month -->
-        <div class="text-center mb-6">
+        {{-- <div class="text-center mb-6">
             <h1 class="text-5xl font-bold mb-2">{{ $currentMonth }}</h1>
             <p class="text-blue-100 text-sm">Current Budget Period</p>
-        </div>
+        </div> --}}
 
         <!-- Budget Stats Grid -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">

@@ -3,10 +3,18 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Dashboard') }}
         </h2>
+
+        <!-- Show Current Month -->
+        <div class="mt-1 text-sm text-gray-600">
+            {{ \Carbon\Carbon::now()->format('F') }}
+        </div>
     </x-slot>
 
-    <div class="py-12 px-4">
+    <div class="py-6 px-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+
+            <livewire:dashboard.projection-info-micro />
+
             <!-- Budget Overview -->
             <div class="mb-6">
                 <livewire:dashboard.budget-overview />
@@ -37,9 +45,9 @@
             </div>
 
             <!-- Projection Info Compact -->
-            <div class="mb-6">
+            {{-- <div class="mb-6">
                 <livewire:dashboard.projection-info-compact />
-            </div>
+            </div> --}}
         </div>
     </div>
 </x-app-layout>
