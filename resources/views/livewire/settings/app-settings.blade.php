@@ -56,9 +56,23 @@
     </div>
 
     <!-- Categories Management -->
-    <div class="mt-6 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+    <div class="mt-6 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg" x-data="{ showCategories: false }">
         <div class="p-6">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Manage Categories</h3>
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Manage Categories</h3>
+                <button
+                    type="button"
+                    @click="showCategories = !showCategories"
+                    class="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                >
+                    <span x-text="showCategories ? 'Hide' : 'Show'"></span>
+                    <svg class="w-4 h-4 transition-transform" :class="{ 'rotate-180': showCategories }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+            </div>
+
+            <div x-show="showCategories" x-transition>
 
             <!-- Add New Category Form -->
             <div class="mb-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600">
@@ -144,13 +158,28 @@
                     @endforeach
                 </div>
             @endif
+            </div>
         </div>
     </div>
 
     <!-- Stores Management -->
-    <div class="mt-6 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+    <div class="mt-6 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg" x-data="{ showStores: false }">
         <div class="p-6">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Manage Stores</h3>
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Manage Stores</h3>
+                <button
+                    type="button"
+                    @click="showStores = !showStores"
+                    class="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                >
+                    <span x-text="showStores ? 'Hide' : 'Show'"></span>
+                    <svg class="w-4 h-4 transition-transform" :class="{ 'rotate-180': showStores }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+            </div>
+
+            <div x-show="showStores" x-transition>
 
             <!-- Add New Store Form -->
             <div class="mb-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600">
@@ -236,6 +265,7 @@
                     @endforeach
                 </div>
             @endif
+            </div>
         </div>
     </div>
 </div>
