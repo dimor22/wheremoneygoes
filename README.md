@@ -1,59 +1,139 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Where Money Goes 💰
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Progressive Web Application (PWA) for tracking your expenses and understanding your spending habits. Take control of your finances by knowing exactly where your money goes.
 
-## About Laravel
+## About Where Money Goes
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**Where Money Goes** is a personal expense tracking application designed to help you monitor, analyze, and understand your spending patterns. Whether you're trying to stick to a budget, save for a goal, or simply become more financially aware, this app provides the tools you need to manage your money effectively.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Purpose
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+The primary purpose of Where Money Goes is to give you complete visibility into your spending habits. By tracking every expense and refund, you can make informed decisions about your finances and identify areas where you can save money.
 
-## Learning Laravel
+## Benefits of Tracking Your Expenses
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### 1. **Budget Awareness**
+- Understand exactly how much you're spending each month
+- Compare your actual spending against your monthly budget
+- See percentage-based metrics to gauge your financial health
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 2. **Identify Spending Patterns**
+- Discover where most of your money goes (categories)
+- Identify recurring expenses that might be unnecessary
+- Track spending by store to see where you shop most frequently
 
-## Laravel Sponsors
+### 3. **Financial Accountability**
+- Create awareness of impulse purchases
+- Hold yourself accountable for every dollar spent
+- Make conscious decisions about future purchases
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 4. **Goal Achievement**
+- Track progress toward savings goals
+- Reduce unnecessary spending by seeing it in real-time
+- Project future spending based on current trends
 
-### Premium Partners
+### 5. **Household Transparency**
+- Share expenses with household members
+- See who spent what and when
+- Collaborate on household budgeting together
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Key Features
 
-## Contributing
+- ✅ **Expense & Refund Tracking** - Record expenses and refunds with visual distinction
+- ✅ **Budget Management** - Set monthly budgets and track your spending against them
+- ✅ **Category Organization** - Organize expenses by custom categories
+- ✅ **Store Tracking** - Track which stores you spend money at
+- ✅ **Monthly Projections** - See projected spending based on daily averages
+- ✅ **Household Sharing** - Share expenses with family members or roommates
+- ✅ **Dark Mode** - Full dark mode support for comfortable viewing
+- ✅ **Mobile-First Design** - Optimized for mobile devices with thumb-friendly navigation
+- ✅ **Progressive Web App** - Install on your device and use offline
+- ✅ **Real-time Updates** - Instant updates using Livewire's reactive components
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Tech Stack
 
-## Code of Conduct
+### Backend Framework: Laravel 11
+**Why:** Laravel provides a robust, elegant PHP framework with built-in authentication, database migrations, and a powerful ORM (Eloquent). It allows rapid development while maintaining clean, maintainable code.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+**How it's used:**
+- Authentication and authorization system
+- Database migrations for schema management
+- Eloquent ORM for database operations
+- Routing and middleware for request handling
+- Service providers for dependency injection
 
-## Security Vulnerabilities
+### Frontend: Livewire 3
+**Why:** Livewire enables building dynamic, reactive interfaces using PHP instead of JavaScript, reducing complexity and maintaining a single-language codebase. It provides a SPA-like experience without the overhead of a separate frontend framework.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+**How it's used:**
+- Real-time reactive components (expense lists, budget overview, projections)
+- Form handling with validation
+- Dynamic dropdowns with auto-selection
+- Search and filter functionality
+- Instant UI updates without page reloads
+
+### Styling: Tailwind CSS 3
+**Why:** Tailwind's utility-first approach allows rapid UI development with consistent design patterns. It's highly customizable and produces minimal CSS in production builds.
+
+**How it's used:**
+- Responsive design (mobile-first approach)
+- Dark mode implementation using class-based toggling
+- Custom color schemes for expenses (red) vs refunds (green)
+- Component styling for buttons, forms, cards, and navigation
+- Backdrop blur effects for modern UI elements
+
+### Database: MySQL
+**Why:** MySQL is reliable, widely-supported, and perfect for relational data like expenses, categories, stores, and user relationships.
+
+**How it's used:**
+- Storing expenses with soft deletes
+- Managing user households and relationships
+- Category and store organization
+- Settings and preferences storage
+- Efficient querying with indexes and relationships
+
+### Build Tool: Vite
+**Why:** Vite provides lightning-fast hot module replacement during development and optimized production builds. It's the modern standard for Laravel projects.
+
+**How it's used:**
+- Asset compilation (CSS and JavaScript)
+- Development server with hot reload
+- Production optimization and minification
+- PostCSS and Tailwind processing
+
+### Progressive Web App (PWA)
+**Why:** PWA capabilities allow the app to be installed on devices, work offline, and feel like a native application while being web-based.
+
+**How it's used:**
+- Service worker for offline functionality
+- Web app manifest for installation
+- Mobile-optimized interface
+- Fixed bottom navigation for thumb-friendly access
+- Home screen installation on iOS and Android
+
+### Additional Technologies
+
+- **Alpine.js** - Lightweight JavaScript for interactive components (dropdowns, modals)
+- **Eloquent ORM** - Database abstraction layer for clean data operations
+- **Blade Templates** - Laravel's templating engine for views
+- **Carbon** - PHP date/time library for date handling and formatting
+- **Service Workers** - Offline support and PWA functionality
+
+## Architecture
+
+The application follows a clean, component-based architecture:
+
+- **Models** - Expense, Category, Store, Household, User, Setting
+- **Livewire Components** - Reactive UI components for each feature
+- **Blade Views** - Template files for rendering HTML
+- **Migrations** - Version-controlled database schema
+- **Routes** - Clean, RESTful routing structure
+
+## Installation
+
+See [SETUP.md](SETUP.md) for detailed installation instructions.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-source software.
+
