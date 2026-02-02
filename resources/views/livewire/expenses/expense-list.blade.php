@@ -8,12 +8,98 @@
                 </div>
             @endif
 
+            <!-- Month Navigation -->
+            <div class="mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-2">
+                    <button
+                        wire:click="previousMonth"
+                        class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-colors"
+                        title="Previous Month"
+                    >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+
+                    <div class="flex items-center gap-3 min-w-[200px] justify-center">
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                            {{ $selectedMonthName }}
+                        </h2>
+                        @if(!$isCurrentMonth)
+                            <button
+                                wire:click="goToCurrentMonth"
+                                class="text-sm px-3 py-1 rounded-md bg-blue-100 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-300 transition-colors"
+                                title="Go to current month"
+                            >
+                                Today
+                            </button>
+                        @endif
+                    </div>
+
+                    <button
+                        wire:click="nextMonth"
+                        class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-colors"
+                        title="Next Month"
+                    >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Month Picker Dropdown -->
+                <div class="relative" x-data="{ open: false }">
+                    <button
+                        @click="open = !open"
+                        @click.away="open = false"
+                        class="px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-colors flex items-center gap-2"
+                    >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span class="text-sm font-medium">Jump to Month</span>
+                    </button>
+
+                    <div
+                        x-show="open"
+                        x-transition
+                        class="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-10 max-h-96 overflow-y-auto"
+                    >
+                        <div class="p-2">
+                            @php
+                                $currentDate = now();
+                                $startDate = $currentDate->copy()->subMonths(12);
+                                $months = [];
+                                for ($i = 0; $i <= 12; $i++) {
+                                    $date = $startDate->copy()->addMonths($i);
+                                    $months[] = ['month' => $date->month, 'year' => $date->year, 'label' => $date->format('F Y')];
+                                }
+                                $months = array_reverse($months);
+                            @endphp
+
+                            @foreach($months as $monthData)
+                                <button
+                                    wire:click="setMonth({{ $monthData['month'] }}, {{ $monthData['year'] }})"
+                                    @click="open = false"
+                                    class="w-full text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-sm
+                                        {{ $monthData['month'] == $selectedMonth && $monthData['year'] == $selectedYear
+                                            ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 font-medium'
+                                            : 'text-gray-700 dark:text-gray-300' }}"
+                                >
+                                    {{ $monthData['label'] }}
+                                </button>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Search Bar -->
             <div class="mb-6">
                 <input
                     type="text"
                     wire:model.live="search"
-                    placeholder="Search expenses..."
+                    placeholder="Search expenses in {{ $selectedMonthName }}..."
                     class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500"
                 >
             </div>
@@ -154,14 +240,20 @@
             <!-- Total Summary -->
             @if($expenses->count() > 0)
                 <div class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <div class="flex justify-between items-center">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                         <span class="text-sm text-gray-600 dark:text-gray-400">
-                            Total Expenses: {{ $expenses->count() }}
+                            {{ $expenses->count() }} {{ $expenses->count() === 1 ? 'expense' : 'expenses' }} in {{ $selectedMonthName }}
                         </span>
                         <span class="text-lg font-semibold text-gray-900 dark:text-gray-100">
                             Total: ${{ number_format($expenses->sum('amount'), 2) }}
                         </span>
                     </div>
+                </div>
+            @else
+                <div class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <p class="text-center text-gray-500 dark:text-gray-400">
+                        No expenses recorded for {{ $selectedMonthName }}.
+                    </p>
                 </div>
             @endif
         </div>

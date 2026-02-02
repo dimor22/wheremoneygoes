@@ -10,6 +10,14 @@ class ExpenseList extends Component
     public $search = '';
     public $sortField = 'expense_date';
     public $sortDirection = 'desc';
+    public $selectedMonth;
+    public $selectedYear;
+
+    public function mount()
+    {
+        $this->selectedMonth = now()->month;
+        $this->selectedYear = now()->year;
+    }
 
     public function sortBy($field)
     {
@@ -19,6 +27,32 @@ class ExpenseList extends Component
             $this->sortField = $field;
             $this->sortDirection = 'asc';
         }
+    }
+
+    public function previousMonth()
+    {
+        $date = \Carbon\Carbon::create($this->selectedYear, $this->selectedMonth, 1)->subMonth();
+        $this->selectedMonth = $date->month;
+        $this->selectedYear = $date->year;
+    }
+
+    public function nextMonth()
+    {
+        $date = \Carbon\Carbon::create($this->selectedYear, $this->selectedMonth, 1)->addMonth();
+        $this->selectedMonth = $date->month;
+        $this->selectedYear = $date->year;
+    }
+
+    public function goToCurrentMonth()
+    {
+        $this->selectedMonth = now()->month;
+        $this->selectedYear = now()->year;
+    }
+
+    public function setMonth($month, $year)
+    {
+        $this->selectedMonth = $month;
+        $this->selectedYear = $year;
     }
 
     public function deleteExpense($expenseId)
@@ -61,8 +95,12 @@ class ExpenseList extends Component
         if (!$household) {
             $expenses = collect();
         } else {
+            $startDate = \Carbon\Carbon::create($this->selectedYear, $this->selectedMonth, 1)->startOfMonth();
+            $endDate = $startDate->copy()->endOfMonth();
+
             $expenses = Expense::withTrashed()
                 ->whereIn('user_id', $household->users->pluck('id'))
+                ->whereBetween('expense_date', [$startDate, $endDate])
                 ->with(['category', 'store', 'user'])
                 ->when($this->search, function ($query) {
                     $query->where(function ($q) {
@@ -86,6 +124,8 @@ class ExpenseList extends Component
 
         return view('livewire.expenses.expense-list', [
             'expenses' => $expenses,
+            'selectedMonthName' => \Carbon\Carbon::create($this->selectedYear, $this->selectedMonth, 1)->format('F Y'),
+            'isCurrentMonth' => $this->selectedMonth === now()->month && $this->selectedYear === now()->year,
         ]);
     }
 }
