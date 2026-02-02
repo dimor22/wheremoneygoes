@@ -255,6 +255,10 @@
                     $totalExpenses = $expenses->where('type', 'expense')->sum('amount');
                     $totalRefunds = $expenses->where('type', 'refund')->sum('amount');
                     $netTotal = $totalExpenses - $totalRefunds;
+
+                    // Calculate budget-related metrics
+                    $budgetPercentage = $budget > 0 ? ($netTotal / $budget) * 100 : 0;
+                    $budgetDifference = $budget - $netTotal;
                 @endphp
                 <div class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
                     <div class="flex flex-col gap-2">
@@ -278,6 +282,27 @@
                                 Net Total: ${{ number_format($netTotal, 2) }}
                             </span>
                         </div>
+
+                        <!-- Budget percentage and difference -->
+                        @if($budget > 0)
+                            <div class="flex flex-col gap-1 pt-2 border-t border-gray-200 dark:border-gray-700 text-sm">
+                                <!-- Percentage of budget used -->
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600 dark:text-gray-400">Budget Used:</span>
+                                    <span class="{{ $budgetPercentage > 100 ? 'text-red-600 dark:text-red-400 font-semibold' : 'text-green-600 dark:text-green-400 font-semibold' }}">
+                                        {{ number_format($budgetPercentage, 1) }}%
+                                    </span>
+                                </div>
+
+                                <!-- Difference from budget -->
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600 dark:text-gray-400">{{ $budgetDifference >= 0 ? 'Remaining:' : 'Over Budget:' }}</span>
+                                    <span class="{{ $budgetDifference >= 0 ? 'text-green-600 dark:text-green-400 font-semibold' : 'text-red-600 dark:text-red-400 font-semibold' }}">
+                                        {{ $budgetDifference >= 0 ? '+' : '' }}${{ number_format(abs($budgetDifference), 2) }}
+                                    </span>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             @else

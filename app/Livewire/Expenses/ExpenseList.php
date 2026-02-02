@@ -122,10 +122,17 @@ class ExpenseList extends Component
                 ->get();
         }
 
+        // Get the budget for the household
+        $budget = 0;
+        if ($household && $household->setting) {
+            $budget = (float) $household->setting->monthly_budget;
+        }
+
         return view('livewire.expenses.expense-list', [
             'expenses' => $expenses,
             'selectedMonthName' => \Carbon\Carbon::create($this->selectedYear, $this->selectedMonth, 1)->format('F Y'),
             'isCurrentMonth' => $this->selectedMonth === now()->month && $this->selectedYear === now()->year,
+            'budget' => $budget,
         ]);
     }
 }
