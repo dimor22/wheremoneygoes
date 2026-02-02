@@ -43,7 +43,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Amount -->
                     <div>
-                        <label for="amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        <label for="amount" class="block text-sm font-medium text-gray-700 dark:text-white">
                             Amount *
                         </label>
                         <div class="mt-1 relative rounded-md shadow-sm">
@@ -67,7 +67,7 @@
                     <!-- Category -->
                     <div>
                         <div class="flex items-center justify-between mb-1">
-                            <label for="category_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            <label for="category_id" class="block text-sm font-medium text-gray-700 dark:text-white">
                                 Category *
                             </label>
                             <button
@@ -120,7 +120,7 @@
                     <!-- Store -->
                     <div>
                         <div class="flex items-center justify-between mb-1">
-                            <label for="store_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            <label for="store_id" class="block text-sm font-medium text-gray-700 dark:text-white">
                                 Store *
                             </label>
                             <button
@@ -188,7 +188,7 @@
                 <div class="hidden md:block" x-data="{ show: @entangle('showOptionalFields') }" :class="{ '!block': show }">
                     <!-- Date -->
                     <div class="mt-6">
-                        <label for="expense_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        <label for="expense_date" class="block text-sm font-medium text-gray-700 dark:text-white">
                             Date *
                         </label>
                         <input
@@ -204,7 +204,7 @@
 
                     <!-- Notes -->
                     <div class="mt-6">
-                        <label for="notes" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        <label for="notes" class="block text-sm font-medium text-gray-700 dark:text-white">
                             Notes (Optional)
                         </label>
                         <textarea

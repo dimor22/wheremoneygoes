@@ -18,7 +18,7 @@
             <form wire:submit="save">
                 <!-- Monthly Budget -->
                 <div class="mb-6">
-                    <label for="monthly_budget" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label for="monthly_budget" class="block text-sm font-medium text-gray-700 dark:text-white">
                         Monthly Budget *
                     </label>
                     <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
