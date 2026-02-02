@@ -65,9 +65,9 @@ class AddExpense extends Component
             'name' => $this->new_category_name,
         ]);
 
-        $this->category_id = $category->id;
         $this->showNewCategoryForm = false;
         $this->new_category_name = '';
+        $this->category_id = $category->id;
 
         session()->flash('category_created', 'Category created successfully!');
     }
@@ -94,9 +94,9 @@ class AddExpense extends Component
             'name' => $this->new_store_name,
         ]);
 
-        $this->store_id = $store->id;
         $this->showNewStoreForm = false;
         $this->new_store_name = '';
+        $this->store_id = $store->id;
 
         session()->flash('store_created', 'Store created successfully!');
     }
@@ -122,8 +122,15 @@ class AddExpense extends Component
 
     public function render()
     {
-        $categories = auth()->user()->categories()->orderBy('name')->get();
-        $stores = auth()->user()->stores()->orderBy('name')->get();
+        $household = auth()->user()->household;
+
+        if (!$household) {
+            $categories = collect();
+            $stores = collect();
+        } else {
+            $categories = $household->categories()->orderBy('name')->get();
+            $stores = $household->stores()->orderBy('name')->get();
+        }
 
         return view('livewire.expenses.add-expense', [
             'categories' => $categories,

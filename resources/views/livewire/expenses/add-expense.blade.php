@@ -102,7 +102,8 @@
                         @endif
 
                         <select
-                            wire:model="category_id"
+                            wire:model.live="category_id"
+                            wire:key="category-select-{{ $categories->count() }}"
                             id="category_id"
                             class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         >
@@ -154,7 +155,8 @@
                         @endif
 
                         <select
-                            wire:model="store_id"
+                            wire:model.live="store_id"
+                            wire:key="store-select-{{ $stores->count() }}"
                             id="store_id"
                             class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         >
