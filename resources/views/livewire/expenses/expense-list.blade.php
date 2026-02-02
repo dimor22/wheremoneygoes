@@ -177,27 +177,39 @@
                     </thead>
                     <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                         @forelse($expenses as $expense)
-                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 {{ $expense->trashed() ? 'opacity-50' : '' }}">
-                                <td class="px-3 py-2 md:px-6 md:py-4  whitespace-nowrap text-sm {{ $expense->trashed() ? 'line-through text-gray-400 dark:text-gray-500' : 'text-gray-900 dark:text-gray-100' }}">
+                            @php
+                                $isRefund = $expense->type === 'refund';
+                                $rowBgClass = $isRefund
+                                    ? 'bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30'
+                                    : 'hover:bg-gray-50 dark:hover:bg-gray-700';
+                                $textClass = $expense->trashed()
+                                    ? 'line-through text-gray-400 dark:text-gray-500'
+                                    : ($isRefund ? 'text-green-700 dark:text-green-400' : 'text-gray-900 dark:text-gray-100');
+                                $amountClass = $expense->trashed()
+                                    ? 'line-through text-gray-400 dark:text-gray-500'
+                                    : ($isRefund ? 'text-green-600 dark:text-green-300 font-semibold' : 'text-gray-900 dark:text-gray-100 font-medium');
+                            @endphp
+                            <tr class="{{ $rowBgClass }} {{ $expense->trashed() ? 'opacity-50' : '' }}">
+                                <td class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap text-sm {{ $textClass }}">
                                     {{ \Carbon\Carbon::parse($expense->expense_date)->format('M d') }}
                                 </td>
-                                <td class="px-3 py-2 md:px-6 md:py-4  whitespace-nowrap text-sm font-medium {{ $expense->trashed() ? 'line-through text-gray-400 dark:text-gray-500' : 'text-gray-900 dark:text-gray-100' }}">
-                                    ${{ number_format($expense->amount, 2) }}
+                                <td class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap text-sm {{ $amountClass }}">
+                                    {{ $isRefund ? '+' : '-' }}${{ number_format($expense->amount, 2) }}
                                 </td>
-                                <td class="px-3 py-2 md:px-6 md:py-4  whitespace-nowrap text-sm {{ $expense->trashed() ? 'line-through text-gray-400 dark:text-gray-500' : 'text-gray-900 dark:text-gray-100' }}">
+                                <td class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap text-sm {{ $textClass }}">
                                     {{ $expense->store->name ?? 'N/A' }}
                                 </td>
-                                <td class="px-3 py-2 md:px-6 md:py-4  whitespace-nowrap text-sm {{ $expense->trashed() ? 'line-through text-gray-400 dark:text-gray-500' : 'text-gray-900 dark:text-gray-100' }}">
+                                <td class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap text-sm {{ $textClass }}">
                                     {{ $expense->category->name ?? 'N/A' }}
                                 </td>
 
-                                <td class="px-3 py-2 md:px-6 md:py-4  whitespace-nowrap text-sm {{ $expense->trashed() ? 'line-through text-gray-400 dark:text-gray-500' : 'text-gray-900 dark:text-gray-100' }}">
+                                <td class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap text-sm {{ $textClass }}">
                                     {{ $expense->user->name ?? 'N/A' }}
                                 </td>
-                                <td class="px-3 py-2 md:px-6 md:py-4  text-sm {{ $expense->trashed() ? 'line-through text-gray-400 dark:text-gray-500' : 'text-gray-500 dark:text-gray-400' }}">
+                                <td class="px-3 py-2 md:px-6 md:py-4 text-sm {{ $expense->trashed() ? 'line-through text-gray-400 dark:text-gray-500' : ($isRefund ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400') }}">
                                     {{ $expense->notes ?? '-' }}
                                 </td>
-                                <td class="px-3 py-2 md:px-6 md:py-4  whitespace-nowrap text-sm">
+                                <td class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap text-sm">
                                     @if($expense->trashed())
                                         <div class="flex gap-2">
                                             <button
@@ -239,14 +251,33 @@
 
             <!-- Total Summary -->
             @if($expenses->count() > 0)
+                @php
+                    $totalExpenses = $expenses->where('type', 'expense')->sum('amount');
+                    $totalRefunds = $expenses->where('type', 'refund')->sum('amount');
+                    $netTotal = $totalExpenses - $totalRefunds;
+                @endphp
                 <div class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                        <span class="text-sm text-gray-600 dark:text-gray-400">
-                            {{ $expenses->count() }} {{ $expenses->count() === 1 ? 'expense' : 'expenses' }} in {{ $selectedMonthName }}
-                        </span>
-                        <span class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                            Total: ${{ number_format($expenses->sum('amount'), 2) }}
-                        </span>
+                    <div class="flex flex-col gap-2">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600 dark:text-gray-400">
+                                {{ $expenses->count() }} {{ $expenses->count() === 1 ? 'transaction' : 'transactions' }} in {{ $selectedMonthName }}
+                            </span>
+                            <span class="text-gray-600 dark:text-gray-400">
+                                Expenses: ${{ number_format($totalExpenses, 2) }}
+                            </span>
+                        </div>
+                        @if($totalRefunds > 0)
+                        <div class="flex justify-end text-sm">
+                            <span class="text-green-600 dark:text-green-400">
+                                Refunds: +${{ number_format($totalRefunds, 2) }}
+                            </span>
+                        </div>
+                        @endif
+                        <div class="flex justify-end pt-2 border-t border-gray-200 dark:border-gray-700">
+                            <span class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                Net Total: ${{ number_format($netTotal, 2) }}
+                            </span>
+                        </div>
                     </div>
                 </div>
             @else

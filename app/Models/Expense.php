@@ -15,6 +15,7 @@ class Expense extends Model
         'category_id',
         'store_id',
         'amount',
+        'type',
         'expense_date',
         'notes',
     ];

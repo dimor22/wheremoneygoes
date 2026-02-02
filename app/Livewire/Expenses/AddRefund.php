@@ -8,7 +8,7 @@ use App\Models\Store;
 use Livewire\Component;
 use Livewire\Attributes\Validate;
 
-class AddExpense extends Component
+class AddRefund extends Component
 {
     #[Validate('required|numeric|min:0.01')]
     public $amount = '';
@@ -111,8 +111,8 @@ class AddExpense extends Component
             'notes' => 'nullable|string',
         ]);
 
-        // Add type as expense
-        $validated['type'] = 'expense';
+        // Add type as refund
+        $validated['type'] = 'refund';
 
         auth()->user()->expenses()->create($validated);
 
@@ -120,7 +120,7 @@ class AddExpense extends Component
         $this->reset(['amount', 'category_id', 'store_id', 'notes']);
         $this->expense_date = now()->format('Y-m-d');
 
-        session()->flash('success', 'Expense added successfully!');
+        session()->flash('success', 'Refund added successfully!');
     }
 
     public function render()
@@ -135,7 +135,7 @@ class AddExpense extends Component
             $stores = $household->stores()->orderBy('name')->get();
         }
 
-        return view('livewire.expenses.add-expense', [
+        return view('livewire.expenses.add-refund', [
             'categories' => $categories,
             'stores' => $stores,
         ]);

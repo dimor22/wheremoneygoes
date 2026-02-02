@@ -22,17 +22,22 @@ class ProjectionInfoCompact extends Component
         $daysElapsed = $today->day;
 
         // Calculate total expenses for current month across all household members (excluding soft-deleted)
-        $currentMonthExpenses = $household
-            ? $household->users()
+        if ($household) {
+            $expenses = $household->users()
                 ->with(['expenses' => function($query) use ($startOfMonth, $today) {
                     $query->whereBetween('expense_date', [$startOfMonth, $today])
                           ->whereNull('deleted_at');
                 }])
                 ->get()
                 ->pluck('expenses')
-                ->flatten()
-                ->sum('amount')
-            : 0;
+                ->flatten();
+
+            $totalExpenses = $expenses->where('type', 'expense')->sum('amount');
+            $totalRefunds = $expenses->where('type', 'refund')->sum('amount');
+            $currentMonthExpenses = $totalExpenses - $totalRefunds;
+        } else {
+            $currentMonthExpenses = 0;
+        }
 
         // Calculate daily average (avoid division by zero)
         $dailyAverage = $daysElapsed > 0 ? $currentMonthExpenses / $daysElapsed : 0;

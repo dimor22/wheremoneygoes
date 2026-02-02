@@ -36,6 +36,9 @@ new class extends Component
                     <x-nav-link :href="route('expenses')" :active="request()->routeIs('expenses')" wire:navigate>
                         {{ __('Add Expense') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('refunds')" :active="request()->routeIs('refunds')" wire:navigate>
+                        {{ __('Add Refund') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('expense-list')" :active="request()->routeIs('expense-list')" wire:navigate>
                         {{ __('Expense List') }}
                     </x-nav-link>
@@ -114,6 +117,9 @@ new class extends Component
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('expenses')" :active="request()->routeIs('expenses')" wire:navigate>
                 {{ __('Add Expense') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('refunds')" :active="request()->routeIs('refunds')" wire:navigate>
+                {{ __('Add Refund') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('expense-list')" :active="request()->routeIs('expense-list')" wire:navigate>
                 {{ __('Expense List') }}

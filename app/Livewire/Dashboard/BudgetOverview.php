@@ -20,16 +20,21 @@ class BudgetOverview extends Component
         $endOfMonth = Carbon::now()->endOfMonth();
 
         // Calculate total expenses for current month across all household members
-        $currentMonthExpenses = $household
-            ? $household->users()
+        if ($household) {
+            $expenses = $household->users()
                 ->with(['expenses' => function($query) use ($startOfMonth, $endOfMonth) {
                     $query->whereBetween('expense_date', [$startOfMonth, $endOfMonth]);
                 }])
                 ->get()
                 ->pluck('expenses')
-                ->flatten()
-                ->sum('amount')
-            : 0;
+                ->flatten();
+
+            $totalExpenses = $expenses->where('type', 'expense')->sum('amount');
+            $totalRefunds = $expenses->where('type', 'refund')->sum('amount');
+            $currentMonthExpenses = $totalExpenses - $totalRefunds;
+        } else {
+            $currentMonthExpenses = 0;
+        }
 
         // Calculate remaining budget
         $remaining = $budget - $currentMonthExpenses;
