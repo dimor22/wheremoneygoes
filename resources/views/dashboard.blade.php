@@ -24,7 +24,7 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
 
 
-                    <div class="grid grid-cols-3 gap-4 mt-6">
+                    <div class="hidden md:grid grid-cols-3 gap-4 mt-6">
 
                         <a href="{{ route('refunds') }}" class="flex flex-col items-center justify-center p-6 bg-white dark:bg-gray-800 border-2 border-green-200 dark:border-green-700 rounded-xl hover:border-green-400 dark:hover:border-green-500 hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1">
                             <span class="text-4xl mb-2">💵</span>
