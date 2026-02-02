@@ -119,34 +119,34 @@
                     <!-- Store -->
                     <div>
                         <div class="flex items-center justify-between mb-1">
-                            <label for="store_id" class="block text-sm font-medium text-gray-700">
+                            <label for="store_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 Store *
                             </label>
                             <button
                                 type="button"
                                 wire:click="toggleNewStoreForm"
-                                class="text-xs text-indigo-600 hover:text-indigo-800"
+                                class="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300"
                             >
                                 {{ $showNewStoreForm ? 'Cancel' : '+ New Store' }}
                             </button>
                         </div>
 
                         @if($showNewStoreForm)
-                            <div class="mb-2 p-3 bg-gray-50 rounded-md border border-gray-200">
+                            <div class="mb-2 p-3 bg-gray-50 dark:bg-gray-700 rounded-md border border-gray-200 dark:border-gray-600">
                                 <input
                                     type="text"
                                     wire:model="new_store_name"
                                     placeholder="Enter store name"
-                                    class="block w-full mb-2 text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                    class="block w-full mb-2 text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
                                     wire:keydown.enter.prevent="createStore"
                                 >
                                 @error('new_store_name')
-                                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                                    <span class="text-red-500 dark:text-red-400 text-xs">{{ $message }}</span>
                                 @enderror
                                 <button
                                     type="button"
                                     wire:click="createStore"
-                                    class="mt-1 text-xs bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700"
+                                    class="mt-1 text-xs bg-indigo-600 dark:bg-indigo-500 text-white px-3 py-1 rounded hover:bg-indigo-700 dark:hover:bg-indigo-600"
                                 >
                                     Create Store
                                 </button>
@@ -156,7 +156,7 @@
                         <select
                             wire:model="store_id"
                             id="store_id"
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            class="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         >
                             <option value="">Select a store</option>
                             @foreach($stores as $store)
@@ -174,7 +174,7 @@
                     <button
                         type="button"
                         wire:click="$toggle('showOptionalFields')"
-                        class="w-full flex items-center justify-between px-4 py-2 text-sm font-medium text-gray-700 bg-gray-50 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        class="w-full flex items-center justify-between px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
                         <span>{{ $showOptionalFields ? 'Hide' : 'Show' }} Optional Fields</span>
                         <svg class="w-5 h-5 transition-transform {{ $showOptionalFields ? 'rotate-180' : '' }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -186,14 +186,14 @@
                 <div class="hidden md:block" x-data="{ show: @entangle('showOptionalFields') }" :class="{ '!block': show }">
                     <!-- Date -->
                     <div class="mt-6">
-                        <label for="expense_date" class="block text-sm font-medium text-gray-700">
+                        <label for="expense_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                             Date *
                         </label>
                         <input
                             type="date"
                             wire:model="expense_date"
                             id="expense_date"
-                            class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                            class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md"
                         >
                         @error('expense_date')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -202,14 +202,14 @@
 
                     <!-- Notes -->
                     <div class="mt-6">
-                        <label for="notes" class="block text-sm font-medium text-gray-700">
+                        <label for="notes" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                             Notes (Optional)
                         </label>
                         <textarea
                             wire:model="notes"
                             id="notes"
                             rows="3"
-                            class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                            class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md"
                             placeholder="Any additional details about this expense..."
                         ></textarea>
                         @error('notes')
