@@ -5,6 +5,7 @@ namespace App\Livewire\Settings;
 use App\Models\Category;
 use App\Models\Setting;
 use App\Models\Store;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\Attributes\Validate;
 
@@ -12,6 +13,13 @@ class AppSettings extends Component
 {
     #[Validate('required|numeric|min:0')]
     public $monthly_budget = 0;
+
+    // Monthly budget history
+    public $budget_month;
+    public $budget_amount = 0;
+    public $editingBudgetId = null;
+    public $editingBudgetMonth = '';
+    public $editingBudgetAmount = 0;
 
     // Category editing
     public $editingCategoryId = null;
@@ -30,8 +38,9 @@ class AppSettings extends Component
     public function mount()
     {
         $household = auth()->user()->household;
-        $setting = $household ? $household->setting : null;
-        $this->monthly_budget = $setting ? $setting->monthly_budget : 0;
+        $this->monthly_budget = $household ? $household->budgetForMonth(Carbon::now()) : 0;
+        $this->budget_month = Carbon::now()->format('Y-m');
+        $this->budget_amount = $this->monthly_budget;
     }
 
     public function save()
@@ -49,7 +58,98 @@ class AppSettings extends Component
             ['user_id' => auth()->id(), 'monthly_budget' => $validated['monthly_budget']]
         );
 
+        $household->monthlyBudgets()->updateOrCreate(
+            ['budget_month' => Carbon::now()->startOfMonth()->toDateString()],
+            ['user_id' => auth()->id(), 'amount' => $validated['monthly_budget']]
+        );
+
         session()->flash('success', 'Settings saved successfully!');
+    }
+
+    // Monthly budget history management
+    public function createBudget()
+    {
+        $this->validate([
+            'budget_month' => 'required|date_format:Y-m',
+            'budget_amount' => 'required|numeric|min:0',
+        ]);
+
+        $household = auth()->user()->household;
+        if (!$household) {
+            session()->flash('error', 'You need to be in a household to save budgets.');
+            return;
+        }
+
+        $month = Carbon::createFromFormat('Y-m', $this->budget_month)
+            ->startOfMonth()
+            ->format('Y-m-01');
+
+        $household->monthlyBudgets()->updateOrCreate(
+            ['budget_month' => $month],
+            ['user_id' => auth()->id(), 'amount' => $this->budget_amount]
+        );
+
+        session()->flash('success', 'Monthly budget saved successfully!');
+    }
+
+    public function editBudget($budgetId)
+    {
+        $household = auth()->user()->household;
+        if (!$household) return;
+
+        $budget = $household->monthlyBudgets()->find($budgetId);
+        if ($budget) {
+            $this->editingBudgetId = $budget->id;
+            $this->editingBudgetMonth = Carbon::parse($budget->budget_month)->format('Y-m');
+            $this->editingBudgetAmount = $budget->amount;
+        }
+    }
+
+    public function updateBudget()
+    {
+        $this->validate([
+            'editingBudgetMonth' => 'required|date_format:Y-m',
+            'editingBudgetAmount' => 'required|numeric|min:0',
+        ]);
+
+        $household = auth()->user()->household;
+        if (!$household) return;
+
+        $budget = $household->monthlyBudgets()->find($this->editingBudgetId);
+        if ($budget) {
+            $month = Carbon::createFromFormat('Y-m', $this->editingBudgetMonth)
+                ->startOfMonth()
+                ->format('Y-m-01');
+            $budget->update([
+                'budget_month' => $month,
+                'amount' => $this->editingBudgetAmount,
+            ]);
+            session()->flash('success', 'Monthly budget updated successfully!');
+        }
+
+        $this->editingBudgetId = null;
+        $this->editingBudgetMonth = '';
+        $this->editingBudgetAmount = 0;
+    }
+
+    public function cancelBudgetEdit()
+    {
+        $this->editingBudgetId = null;
+        $this->editingBudgetMonth = '';
+        $this->editingBudgetAmount = 0;
+        $this->resetValidation(['editingBudgetMonth', 'editingBudgetAmount']);
+    }
+
+    public function deleteBudget($budgetId)
+    {
+        $household = auth()->user()->household;
+        if (!$household) return;
+
+        $budget = $household->monthlyBudgets()->find($budgetId);
+        if ($budget) {
+            $budget->delete();
+            session()->flash('success', 'Monthly budget deleted successfully!');
+        }
     }
 
     // Category management
@@ -215,10 +315,12 @@ class AppSettings extends Component
         $stores = $household ? $household->stores()->withCount(['expenses' => function ($query) {
             $query->withTrashed();
         }])->orderBy('name')->get() : collect();
+        $monthlyBudgets = $household ? $household->monthlyBudgets()->orderBy('budget_month', 'desc')->get() : collect();
 
         return view('livewire.settings.app-settings', [
             'categories' => $categories,
             'stores' => $stores,
+            'monthlyBudgets' => $monthlyBudgets,
         ]);
     }
 }

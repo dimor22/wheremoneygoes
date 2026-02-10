@@ -12,11 +12,13 @@ class ExpenseList extends Component
     public $sortDirection = 'desc';
     public $selectedMonth;
     public $selectedYear;
+    public $budget = 0;
 
     public function mount()
     {
         $this->selectedMonth = now()->month;
         $this->selectedYear = now()->year;
+        $this->updateBudgetForSelection();
     }
 
     public function sortBy($field)
@@ -34,6 +36,7 @@ class ExpenseList extends Component
         $date = \Carbon\Carbon::create($this->selectedYear, $this->selectedMonth, 1)->subMonth();
         $this->selectedMonth = $date->month;
         $this->selectedYear = $date->year;
+        $this->updateBudgetForSelection();
     }
 
     public function nextMonth()
@@ -41,18 +44,34 @@ class ExpenseList extends Component
         $date = \Carbon\Carbon::create($this->selectedYear, $this->selectedMonth, 1)->addMonth();
         $this->selectedMonth = $date->month;
         $this->selectedYear = $date->year;
+        $this->updateBudgetForSelection();
     }
 
     public function goToCurrentMonth()
     {
         $this->selectedMonth = now()->month;
         $this->selectedYear = now()->year;
+        $this->updateBudgetForSelection();
     }
 
     public function setMonth($month, $year)
     {
         $this->selectedMonth = $month;
         $this->selectedYear = $year;
+        $this->updateBudgetForSelection();
+    }
+
+    protected function updateBudgetForSelection(): void
+    {
+        $household = auth()->user()->household;
+        if (!$household) {
+            $this->budget = 0;
+            return;
+        }
+
+        $budgetDate = \Carbon\Carbon::create($this->selectedYear, $this->selectedMonth, 1);
+
+        $this->budget = $household->budgetForExactMonth($budgetDate);
     }
 
     public function deleteExpense($expenseId)
@@ -122,17 +141,11 @@ class ExpenseList extends Component
                 ->get();
         }
 
-        // Get the budget for the household
-        $budget = 0;
-        if ($household && $household->setting) {
-            $budget = (float) $household->setting->monthly_budget;
-        }
-
         return view('livewire.expenses.expense-list', [
             'expenses' => $expenses,
             'selectedMonthName' => \Carbon\Carbon::create($this->selectedYear, $this->selectedMonth, 1)->format('F Y'),
             'isCurrentMonth' => $this->selectedMonth === now()->month && $this->selectedYear === now()->year,
-            'budget' => $budget,
+            'budget' => $this->budget,
         ]);
     }
 }

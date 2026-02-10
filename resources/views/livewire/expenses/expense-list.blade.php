@@ -104,6 +104,79 @@
                 >
             </div>
 
+            <!-- Total Summary -->
+            @if($expenses->count() > 0)
+                @php
+                    $totalExpenses = $expenses->where('type', 'expense')->sum('amount');
+                    $totalRefunds = $expenses->where('type', 'refund')->sum('amount');
+                    $netTotal = $totalExpenses - $totalRefunds;
+
+                    // Calculate budget-related metrics
+                    $budgetPercentage = $budget > 0 ? ($netTotal / $budget) * 100 : 0;
+                    $budgetDifference = $budget - $netTotal;
+                @endphp
+                <div class="mb-6 pt-4">
+                    <div class="flex flex-col gap-2">
+                        <div class="flex justify-end pt-2 border-t border-gray-200 dark:border-gray-700">
+                            <span class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                Net Total: ${{ number_format($netTotal, 2) }}
+                            </span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600 dark:text-gray-400">
+                                {{ $expenses->count() }} {{ $expenses->count() === 1 ? 'transaction' : 'transactions' }} in {{ $selectedMonthName }}
+                            </span>
+                            <span class="text-gray-600 dark:text-gray-400">
+                                Expenses: ${{ number_format($totalExpenses, 2) }}
+                            </span>
+                        </div>
+
+                        @if($totalRefunds > 0)
+                            <div class="flex justify-end text-sm">
+                                <span class="text-green-600 dark:text-green-400">
+                                    Refunds: +${{ number_format($totalRefunds, 2) }}
+                                </span>
+                            </div>
+                        @endif
+
+
+                        <!-- Budget percentage and difference -->
+                        @if($budget > 0)
+                            <div class="flex flex-col gap-1 pt-2 border-t border-gray-200 dark:border-gray-700 text-sm">
+                                <!-- Budget Information -->
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600 dark:text-gray-400">Total Budget:</span>
+                                    <span class="text-gray-900 dark:text-gray-100 font-semibold">
+                                        ${{ number_format($budget, 2) }}
+                                    </span>
+                                </div>
+                                <!-- Percentage of budget used -->
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600 dark:text-gray-400">Budget Used:</span>
+                                    <span class="{{ $budgetPercentage > 100 ? 'text-red-600 dark:text-red-400 font-semibold' : 'text-green-600 dark:text-green-400 font-semibold' }}">
+                                        {{ number_format($budgetPercentage, 1) }}%
+                                    </span>
+                                </div>
+
+                                <!-- Difference from budget -->
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600 dark:text-gray-400">{{ $budgetDifference >= 0 ? 'Remaining:' : 'Over Budget:' }}</span>
+                                    <span class="{{ $budgetDifference >= 0 ? 'text-green-600 dark:text-green-400 font-semibold' : 'text-red-600 dark:text-red-400 font-semibold' }}">
+                                        {{ $budgetDifference >= 0 ? '+' : '' }}${{ number_format(abs($budgetDifference), 2) }}
+                                    </span>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @else
+                <div class="mb-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <p class="text-center text-gray-500 dark:text-gray-400">
+                        No expenses recorded for {{ $selectedMonthName }}.
+                    </p>
+                </div>
+            @endif
+
             <!-- Expenses Table -->
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -249,69 +322,7 @@
                 </table>
             </div>
 
-            <!-- Total Summary -->
-            @if($expenses->count() > 0)
-                @php
-                    $totalExpenses = $expenses->where('type', 'expense')->sum('amount');
-                    $totalRefunds = $expenses->where('type', 'refund')->sum('amount');
-                    $netTotal = $totalExpenses - $totalRefunds;
 
-                    // Calculate budget-related metrics
-                    $budgetPercentage = $budget > 0 ? ($netTotal / $budget) * 100 : 0;
-                    $budgetDifference = $budget - $netTotal;
-                @endphp
-                <div class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <div class="flex flex-col gap-2">
-                        <div class="flex justify-between items-center text-sm">
-                            <span class="text-gray-600 dark:text-gray-400">
-                                {{ $expenses->count() }} {{ $expenses->count() === 1 ? 'transaction' : 'transactions' }} in {{ $selectedMonthName }}
-                            </span>
-                            <span class="text-gray-600 dark:text-gray-400">
-                                Expenses: ${{ number_format($totalExpenses, 2) }}
-                            </span>
-                        </div>
-                        @if($totalRefunds > 0)
-                        <div class="flex justify-end text-sm">
-                            <span class="text-green-600 dark:text-green-400">
-                                Refunds: +${{ number_format($totalRefunds, 2) }}
-                            </span>
-                        </div>
-                        @endif
-                        <div class="flex justify-end pt-2 border-t border-gray-200 dark:border-gray-700">
-                            <span class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                                Net Total: ${{ number_format($netTotal, 2) }}
-                            </span>
-                        </div>
-
-                        <!-- Budget percentage and difference -->
-                        @if($budget > 0)
-                            <div class="flex flex-col gap-1 pt-2 border-t border-gray-200 dark:border-gray-700 text-sm">
-                                <!-- Percentage of budget used -->
-                                <div class="flex justify-between items-center">
-                                    <span class="text-gray-600 dark:text-gray-400">Budget Used:</span>
-                                    <span class="{{ $budgetPercentage > 100 ? 'text-red-600 dark:text-red-400 font-semibold' : 'text-green-600 dark:text-green-400 font-semibold' }}">
-                                        {{ number_format($budgetPercentage, 1) }}%
-                                    </span>
-                                </div>
-
-                                <!-- Difference from budget -->
-                                <div class="flex justify-between items-center">
-                                    <span class="text-gray-600 dark:text-gray-400">{{ $budgetDifference >= 0 ? 'Remaining:' : 'Over Budget:' }}</span>
-                                    <span class="{{ $budgetDifference >= 0 ? 'text-green-600 dark:text-green-400 font-semibold' : 'text-red-600 dark:text-red-400 font-semibold' }}">
-                                        {{ $budgetDifference >= 0 ? '+' : '' }}${{ number_format(abs($budgetDifference), 2) }}
-                                    </span>
-                                </div>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            @else
-                <div class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <p class="text-center text-gray-500 dark:text-gray-400">
-                        No expenses recorded for {{ $selectedMonthName }}.
-                    </p>
-                </div>
-            @endif
         </div>
     </div>
 </div>

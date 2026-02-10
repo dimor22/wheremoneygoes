@@ -11,8 +11,7 @@ class BudgetOverview extends Component
     {
         $user = auth()->user();
         $household = $user->household;
-        $setting = $household ? $household->setting : null;
-        $budget = $setting ? $setting->monthly_budget : 0;
+        $budget = $household ? $household->budgetForMonth(Carbon::now()) : 0;
         $daysRemaining = Carbon::now()->endOfMonth()->day - Carbon::now()->day + 1;
 
         // Get current month start and end

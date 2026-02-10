@@ -45,8 +45,7 @@ class ProjectionInfo extends Component
         $projectedMonthlySpending = $dailyAverage * $daysInMonth;
 
         // Get budget for comparison
-        $setting = $household ? $household->setting : null;
-        $budget = $setting ? $setting->monthly_budget : 0;
+        $budget = $household ? $household->budgetForMonth(Carbon::now()) : 0;
 
         // Calculate if projection is over budget
         $projectionVsBudget = $budget > 0 ? (($projectedMonthlySpending - $budget) / $budget) * 100 : 0;
