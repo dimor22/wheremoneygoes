@@ -29,7 +29,7 @@ new class extends Component
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 lg:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </x-nav-link>
@@ -44,9 +44,6 @@ new class extends Component
                     </x-nav-link>
                     <x-nav-link :href="route('projection')" :active="request()->routeIs('projection')" wire:navigate>
                         {{ __('Projection') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('settings')" :active="request()->routeIs('settings')" wire:navigate>
-                        {{ __('Settings') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -83,6 +80,9 @@ new class extends Component
                     </x-slot>
 
                     <x-slot name="content">
+                        <x-dropdown-link :href="route('settings')" :active="request()->routeIs('settings')" wire:navigate>
+                            {{ __('Settings') }}
+                        </x-dropdown-link>
                         <x-dropdown-link :href="route('profile')" wire:navigate>
                             {{ __('Profile') }}
                         </x-dropdown-link>
@@ -127,9 +127,7 @@ new class extends Component
             <x-responsive-nav-link :href="route('projection')" :active="request()->routeIs('projection')" wire:navigate>
                 {{ __('Projection') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('settings')" :active="request()->routeIs('settings')" wire:navigate>
-                {{ __('Settings') }}
-            </x-responsive-nav-link>
+
         </div>
 
         <!-- Responsive Settings Options -->
@@ -156,6 +154,9 @@ new class extends Component
             </div>
 
             <div class="mt-3 space-y-1">
+                <x-responsive-nav-link :href="route('settings')" :active="request()->routeIs('settings')" wire:navigate>
+                    {{ __('Settings') }}
+                </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('profile')" wire:navigate>
                     {{ __('Profile') }}
                 </x-responsive-nav-link>

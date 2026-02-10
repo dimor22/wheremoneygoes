@@ -48,7 +48,7 @@
             </main>
 
             <!-- Fixed Bottom Action Bar (Mobile Only) -->
-            <div class="fixed bottom-0 left-0 right-0 md:hidden bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border-t border-gray-200 dark:border-gray-700 z-50 safe-area-inset-bottom">
+            <div class="fixed bottom-0 left-0 right-0 lg:hidden bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border-t border-gray-200 dark:border-gray-700 z-50 safe-area-inset-bottom">
                     <div class="flex flex-row p-3 gap-1">
 
                         <!-- Dashboard Button -->
