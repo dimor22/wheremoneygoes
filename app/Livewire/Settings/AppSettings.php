@@ -14,6 +14,9 @@ class AppSettings extends Component
     #[Validate('required|numeric|min:0')]
     public $monthly_budget = 0;
 
+    #[Validate('required|string|timezone')]
+    public $timezone = 'UTC';
+
     // Monthly budget history
     public $budget_month;
     public $budget_amount = 0;
@@ -41,6 +44,7 @@ class AppSettings extends Component
         $this->monthly_budget = $household ? $household->budgetForMonth(Carbon::now()) : 0;
         $this->budget_month = Carbon::now()->format('Y-m');
         $this->budget_amount = $this->monthly_budget;
+        $this->timezone = auth()->user()->timezone ?: 'UTC';
     }
 
     public function save()
@@ -52,6 +56,12 @@ class AppSettings extends Component
             session()->flash('error', 'You need to be in a household to save settings.');
             return;
         }
+
+        auth()->user()->update(['timezone' => $validated['timezone']]);
+
+        // Update the runtime timezone so subsequent now() calls reflect it immediately
+        config(['app.timezone' => $validated['timezone']]);
+        date_default_timezone_set($validated['timezone']);
 
         $household->setting()->updateOrCreate(
             ['household_id' => $household->id],

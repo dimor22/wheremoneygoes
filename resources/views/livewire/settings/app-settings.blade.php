@@ -16,6 +16,28 @@
             @endif
 
             <form wire:submit="save">
+                <!-- Timezone -->
+                <div class="mb-6">
+                    <label for="timezone" class="block text-sm font-medium text-gray-700 dark:text-white">
+                        Timezone
+                    </label>
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                        Used to determine the default date when adding expenses
+                    </p>
+                    <select
+                        wire:model="timezone"
+                        id="timezone"
+                        class="mt-2 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    >
+                        @foreach(\DateTimeZone::listIdentifiers() as $tz)
+                            <option value="{{ $tz }}">{{ $tz }}</option>
+                        @endforeach
+                    </select>
+                    @error('timezone')
+                        <span class="text-red-500 dark:text-red-400 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
+
                 <!-- Monthly Budget -->
                 <div class="mb-6">
                     <label for="monthly_budget" class="block text-sm font-medium text-gray-700 dark:text-white">
@@ -195,7 +217,7 @@
                         type="submit"
                         class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-800 dark:bg-gray-700 hover:bg-gray-900 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700"
                     >
-                        Save Budget
+                        Save Settings
                     </button>
                 </div>
             </form>
