@@ -57,6 +57,70 @@
                         .catch(error => console.log('Service Worker registration failed:', error));
                 });
             }
+
+            @if (app()->isProduction())
+                const reportedClientErrors = new Set();
+
+                function reportClientError(payload) {
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+                    if (!csrfToken) {
+                        return;
+                    }
+
+                    const dedupeKey = [payload.type, payload.message, payload.source, payload.line, payload.column].join('|');
+                    if (reportedClientErrors.has(dedupeKey)) {
+                        return;
+                    }
+
+                    reportedClientErrors.add(dedupeKey);
+
+                    fetch('{{ route('client-errors.livewire') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                            'X-Requested-With': 'XMLHttpRequest',
+                        },
+                        credentials: 'same-origin',
+                        body: JSON.stringify({
+                            ...payload,
+                            url: window.location.href,
+                            user_agent: navigator.userAgent,
+                        }),
+                    }).catch(() => {});
+                }
+
+                window.addEventListener('error', event => {
+                    reportClientError({
+                        type: 'window_error',
+                        message: event.message || 'Unknown error',
+                        source: event.filename || null,
+                        line: event.lineno || null,
+                        column: event.colno || null,
+                        stack: event.error?.stack || null,
+                    });
+                });
+
+                window.addEventListener('unhandledrejection', event => {
+                    reportClientError({
+                        type: 'unhandled_rejection',
+                        message: String(event.reason?.message || event.reason || 'Unhandled promise rejection'),
+                        stack: event.reason?.stack || null,
+                    });
+                });
+
+                window.addEventListener('load', () => {
+                    setTimeout(() => {
+                        if (typeof window.Livewire === 'undefined') {
+                            reportClientError({
+                                type: 'livewire_missing',
+                                message: 'Livewire did not initialize on guest layout.',
+                            });
+                        }
+                    }, 1500);
+                });
+            @endif
         </script>
     </body>
 </html>

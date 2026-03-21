@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Auth\VerifyEmailController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -10,6 +12,27 @@ Route::middleware('guest')->group(function () {
 
     Volt::route('login', 'pages.auth.login')
         ->name('login');
+
+    Route::post('login', function (Request $request) {
+        $credentials = $request->validate([
+            'email' => ['required', 'string', 'email'],
+            'password' => ['required', 'string'],
+            'remember' => ['nullable', 'boolean'],
+        ]);
+
+        if (! Auth::attempt([
+            'email' => $credentials['email'],
+            'password' => $credentials['password'],
+        ], (bool) ($credentials['remember'] ?? false))) {
+            return back()->withErrors([
+                'form.email' => trans('auth.failed'),
+            ])->onlyInput('email');
+        }
+
+        $request->session()->regenerate();
+
+        return redirect()->intended(route('dashboard'));
+    })->name('login.submit');
 
     Volt::route('forgot-password', 'pages.auth.forgot-password')
         ->name('password.request');
